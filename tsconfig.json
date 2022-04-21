@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "module": "ES6",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "target": "es6",
@@ -11,7 +12,11 @@
         "declaration": true,
         "strict": true,
         "stripInternal": true,
-        "lib": ["es5", "es6", "dom"],
+        "lib": [
+            "es5",
+            "es6",
+            "dom"
+        ],
         "paths": {
             "*": [
                 "node_modules/*"
@@ -20,5 +25,8 @@
     },
     "include": [
         "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>moroboxai-editor-web</title>
+    </head>
+    <body>
+        <div id="editor"></div>
+    </body>
+
+    <script type="text/javascript" src="./lib/umd/moroboxai-editor-web.js"></script>
+    <script type="text/javascript">
+        MoroboxAIEditor.init({
+            element: document.getElementById("editor"),
+            value: 'function a() {\n' +
+                '  console.log("test");\n' +
+                '}\n',
+            width: '500px',
+            height: '400px'
+        });
+    </script>
+
+    <style>
+        body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #editor {
+            border-radius: 1em;
+            box-shadow: 4px 4px 8px rgb(0 0 0 / 50%);
+            overflow: hidden;
+        }
+    </style>
+</html>
