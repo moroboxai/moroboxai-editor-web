@@ -6,9 +6,25 @@ export interface IEditorOptions {
     value?: string;
     width?: string;
     height?: string;
+    onLoad?: (value: string) => void;
+    onUnload?: () => void;
 }
 
 export interface IEditor {
+    // Text in the editor
+    value: string;
+
+    /**
+     * Register the onLoad callback.
+     * @param {Function} callback - Callback
+     */
+    onLoad(callback?: (value: string) => void): void;
+
+    /**
+     * Register the onUnload callback.
+     */
+    onUnload(callback?: () => void): void;
+
     /**
      * Remove the editor from document.
      */
@@ -56,13 +72,19 @@ class Editor implements IEditor {
         element?: HTMLElement;
         base?: HTMLDivElement;
         toolbar?: HTMLDivElement;
-        runButton?: HTMLInputElement;
+        loadButton?: HTMLInputElement;
+        unloadButton?: HTMLInputElement;
         wrapper?: HTMLDivElement;
         editor?: monaco.editor.IStandaloneCodeEditor;
     } = {};
+    private _onLoadCallback?: (value: string) => void;
+    private _onUnloadCallback?: () => void;
 
     constructor(element: Element, options: IEditorOptions) {
         this._options = options;
+
+        this._onLoadCallback = options.onLoad;
+        this._onUnloadCallback = options.onUnload;
         
         if (isHTMLElement(element)) {
             this._ui.element = element as HTMLElement;
@@ -114,8 +136,18 @@ class Editor implements IEditor {
         {
             const input = createElement('input') as HTMLInputElement;
             input.type = 'button';
-            input.value = 'Run';
-            this._ui.runButton = input;
+            input.value = 'Load';
+            input.onclick = () => this._notifyLoad();
+            this._ui.loadButton = input;
+            this._ui.toolbar.appendChild(input);
+        }
+
+        {
+            const input = createElement('input') as HTMLInputElement;
+            input.type = 'button';
+            input.value = 'Unload';
+            input.onclick = () => this._notifyUnload();
+            this._ui.unloadButton = input;
             this._ui.toolbar.appendChild(input);
         }
 
@@ -144,6 +176,41 @@ class Editor implements IEditor {
 
             this._ui.editor = editor;
         }
+    }
+
+    private _notifyLoad() {
+        if (this._onLoadCallback) {
+            this._onLoadCallback(this.value);
+        }
+    }
+
+    private _notifyUnload() {
+        if (this._onUnloadCallback) {
+            this._onUnloadCallback();
+        }
+    }
+
+    // IEditor functions
+    set value(text: string) {
+        if (this._ui.editor !== undefined) {
+            this._ui.editor.setValue(text);
+        }
+    }
+
+    get value(): string {
+        if (this._ui.editor !== undefined) {
+            return this._ui.editor.getValue();
+        }
+
+        return "";
+    }
+
+    onLoad(callback?: (value: string) => void): void {
+        this._onLoadCallback = callback;
+    }
+
+    onUnload(callback?: () => void): void {
+        this._onUnloadCallback = callback;
     }
 
     remove() {
