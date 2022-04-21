@@ -48,11 +48,11 @@ You can also import the lib as an ECMAScript module:
 
 ```html
 <html>
- <div id="player"></div> 
+ <div id="editor"></div> 
  
  <script type="module" src="./lib/es/moroboxai-editor-web.js"></script>
  <script type="module">
-  import * as MoroboxAIPlayer from "./lib/es/moroboxai-editor-web.js";
+  import * as MoroboxAIEditor from "./lib/es/moroboxai-editor-web.js";
   
   ...
  </script>
