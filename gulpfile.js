@@ -6,16 +6,9 @@ const ts = require('gulp-typescript');
 const webpack = require('webpack');
 const gulpWebpack = require('webpack-stream');
 
-const webpackConfig = (lib, output, options, library) => ({
-	entry: {
-		'moroboxai-editor-web': './src/index.ts',
-		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
-		'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',
-		'css.worker': 'monaco-editor/esm/vs/language/css/css.worker',
-		'html.worker': 'monaco-editor/esm/vs/language/html/html.worker',
-		'ts.worker': 'monaco-editor/esm/vs/language/typescript/ts.worker'
-	},
-    mode: 'production',
+const webpackConfig = (lib, output, options, library, prod) => ({
+	entry: './src/index.ts',
+    mode: prod ? 'production' : 'development',
     module: {
         rules: [{
             test: /\.tsx?$/,
@@ -33,7 +26,7 @@ const webpackConfig = (lib, output, options, library) => ({
     },
     output: {
 		globalObject: 'self',
-        filename: '[name].js',
+        filename: output,
         path: path.resolve(__dirname, lib),
         ...library
     },
@@ -63,7 +56,8 @@ gulp.task('es', () => {
                 library: {
                     type: "module"
                 }
-            }
+            },
+            true
         ), webpack))
         .pipe(gulp.dest('lib/es'));
 });

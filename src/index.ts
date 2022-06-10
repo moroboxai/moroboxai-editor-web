@@ -1,255 +1,37 @@
-import * as monaco from 'monaco-editor';
+import * as ace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/monokai';
 
-export interface IEditorOptions {
-    element?: Element | Element[] | HTMLCollectionOf<Element>;
-    language?: string;
-    value?: string;
-    width?: string;
-    height?: string;
-    onLoad?: (value: string) => void;
-    onUnload?: () => void;
+import {IEditor, IEditorOptions, IEditorFactoryOptions, IEditorInstance, init as _init} from 'moroboxai-editor-sdk';
+
+export { IEditor, IEditorOptions, defaultOptions } from 'moroboxai-editor-sdk';
+
+function factory(options: IEditorFactoryOptions): IEditorInstance {
+    const editor = ace.edit(options.element);
+    editor.getSession().setMode('ace/mode/javascript');
+    editor.setTheme('ace/theme/monokai');
+
+    return new EditorInstance(editor);
 }
 
-export interface IEditor {
-    // Text in the editor
-    value: string;
+class EditorInstance implements IEditorInstance {
+    private _instance: ace.Editor;
 
-    /**
-     * Register the onLoad callback.
-     * @param {Function} callback - Callback
-     */
-    onLoad(callback?: (value: string) => void): void;
-
-    /**
-     * Register the onUnload callback.
-     */
-    onUnload(callback?: () => void): void;
-
-    /**
-     * Remove the editor from document.
-     */
-    remove(): void;
-}
-
-function createElement(tagName: string, className?: string): HTMLElement {
-    const el = document.createElement(tagName);
-    if (className !== undefined) {
-        el.classList.add(className);
-    }
-    return el;
-}
-
-const STYLES = {
-    'editor': {
-        'background-color': '#1e1e1e',
-        'overflow': 'hidden'
-    },
-    'body': {
-        'padding': '0.5em',
-        'padding-top': '2em',
-        'padding-bottom': '1em'
-    },
-    'toolbar': {
-        'position': 'relative',
-        'flex-grow': '1',
-        'top': '-1em',
-        'padding-left': '1em',
-        'padding-right': '1em',
-        'display': 'flex',
-        'flex-direction': 'row'
-    },
-    'language': {
-        'font-weight': 'bold',
-        'color': '#4e6c8b',
-        'flex-grow': '1',
-        'text-align': 'right'
-    }
-}
-
-class Editor implements IEditor {
-    private _options: IEditorOptions;
-    private _ui: {
-        element?: HTMLElement;
-        base?: HTMLDivElement;
-        toolbar?: HTMLDivElement;
-        loadButton?: HTMLInputElement;
-        unloadButton?: HTMLInputElement;
-        wrapper?: HTMLDivElement;
-        editor?: monaco.editor.IStandaloneCodeEditor;
-    } = {};
-    private _onLoadCallback?: (value: string) => void;
-    private _onUnloadCallback?: () => void;
-
-    constructor(element: Element, options: IEditorOptions) {
-        this._options = options;
-
-        this._onLoadCallback = options.onLoad;
-        this._onUnloadCallback = options.onUnload;
-        
-        if (isHTMLElement(element)) {
-            this._ui.element = element as HTMLElement;
-            this._options = {...options};
-
-            this._attach();
-        }
+    constructor(instance: ace.Editor) {
+        this._instance = instance;
     }
 
-    private _attach() {
-        if (this._ui.element === undefined) {
-            return;
-        }
-
-        {
-            const div = createElement('div', 'moroboxai-editor') as HTMLDivElement;
-            Object.assign(div.style, STYLES['editor']);
-            if (this._options.width !== undefined) {
-                div.style.width = this._options.width;
-            }
-            if (this._options.height !== undefined) {
-                div.style.height = this._options.height;
-            }
-            this._ui.base = div;
-            this._ui.element.appendChild(div);
-        }
-
-        {
-            const body = createElement('div', 'moroboxai-body') as HTMLDivElement;
-            Object.assign(body.style, STYLES['body']);
-            this._ui.base.appendChild(body);
-
-            {
-                const div = createElement('div', 'moroboxai-toolbar') as HTMLDivElement;
-                Object.assign(div.style, STYLES['toolbar']);
-                this._ui.toolbar = div;
-                body.appendChild(div);
-            }
-
-            {
-                const div = createElement('div') as HTMLDivElement;
-                div.style.width = '100%';
-                div.style.height = '100%';
-                this._ui.wrapper = div;
-                body.appendChild(div);
-            }
-        }
-
-        {
-            const input = createElement('input') as HTMLInputElement;
-            input.type = 'button';
-            input.value = 'Load';
-            input.onclick = () => this._notifyLoad();
-            this._ui.loadButton = input;
-            this._ui.toolbar.appendChild(input);
-        }
-
-        {
-            const input = createElement('input') as HTMLInputElement;
-            input.type = 'button';
-            input.value = 'Unload';
-            input.onclick = () => this._notifyUnload();
-            this._ui.unloadButton = input;
-            this._ui.toolbar.appendChild(input);
-        }
-
-        {
-            const span = createElement('span', 'moroboxai-language') as HTMLSpanElement;
-            Object.assign(span.style, STYLES['language']);
-            span.textContent = 'Javascript';
-            this._ui.toolbar.appendChild(span);
-        }
-
-        {
-            const editor = monaco.editor.create(this._ui.wrapper, {
-                value: this._options.value,
-                theme: 'vs-dark',
-                language: this._options.language,
-                minimap: {enabled: false}
-            });
-            
-            let div = editor.getDomNode()!;
-            div.style.width = '100%';
-            div.style.height = '100%';
-
-            div = div.firstElementChild as HTMLElement;
-            div.style.width = '100%';
-            div.style.height = '100%';
-
-            this._ui.editor = editor;
-        }
-    }
-
-    private _notifyLoad() {
-        if (this._onLoadCallback) {
-            this._onLoadCallback(this.value);
-        }
-    }
-
-    private _notifyUnload() {
-        if (this._onUnloadCallback) {
-            this._onUnloadCallback();
-        }
-    }
-
-    // IEditor functions
     set value(text: string) {
-        if (this._ui.editor !== undefined) {
-            this._ui.editor.setValue(text);
-        }
+        this._instance.setValue(text, -1);
     }
 
     get value(): string {
-        if (this._ui.editor !== undefined) {
-            return this._ui.editor.getValue();
-        }
-
-        return "";
-    }
-
-    onLoad(callback?: (value: string) => void): void {
-        this._onLoadCallback = callback;
-    }
-
-    onUnload(callback?: () => void): void {
-        this._onUnloadCallback = callback;
+        return this._instance.getValue();
     }
 
     remove() {
-        if (this._ui.editor !== undefined) {
-            this._ui.editor.dispose();
-            this._ui.editor = undefined;
-        }
-
-        if (this._ui.base !== undefined) {
-            this._ui.base.remove();
-            this._ui.base = undefined;
-        }
+        this._instance.destroy();
     }
-}
-
-/**
- * Get default configured editor options.
- * @returns {IEditorOptions} Default options
- */
-export function defaultOptions(): IEditorOptions {
-    return {
-        language: 'javascript'
-    };
-}
-
-function isHTMLElement(_: Element | HTMLElement): _ is HTMLElement {
-    return "dataset" in _;
-}
-
-function isElementArray(_: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>): _ is Element[] | HTMLCollectionOf<Element> {
-    return "length" in _;
-}
-
-function isEditorOptions(_?: | IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>): _ is IEditorOptions {
-    return _ !== undefined && !isElementArray(_) && !("className" in _);
-}
-
-function createEditor(element: Element, options: IEditorOptions): IEditor {
-    return new Editor(element, options);
 }
 
 export function init() : IEditor | IEditor[];
@@ -266,30 +48,5 @@ export function init(element?: IEditorOptions | Element | Element[] | HTMLCollec
  * @param {IEditor} options Options for initializing the editor
  */
 export function init(element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>, options?: IEditorOptions) : IEditor | IEditor[] {
-    let _elements: undefined | Element | Element[] | HTMLCollectionOf<Element> = undefined;
-    let _options: IEditorOptions = defaultOptions();
-
-    if (isEditorOptions(element)) {
-        options = element;
-    } else {
-        _elements = element;
-    }
-
-    if (options !== undefined) {
-        _options = {..._options, ...options};
-    }
-
-    if (_elements == undefined) {
-        if (_options.element !== undefined) {
-            _elements = _options.element;
-        } else {
-            _elements = document.getElementsByClassName("moroboxai-editor");
-        }
-    }
-
-    if (!isElementArray(_elements)) {
-        return createEditor(_elements, _options);
-    }
-
-    return Array.prototype.map.call(_elements, _ => createEditor(_, _options)) as IEditor[];
+    return _init(factory, element, options);
 }

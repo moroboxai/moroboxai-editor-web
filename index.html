@@ -14,7 +14,9 @@
                 '  console.log("test");\n' +
                 '}\n',
             width: '500px',
-            height: '400px'
+            height: '400px',
+            onLoad: (data) => console.log(data),
+            onUnload: () => console.log("unload")
         });
     </script>
 
