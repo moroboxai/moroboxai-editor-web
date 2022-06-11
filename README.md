@@ -55,7 +55,7 @@ Open `sample.html` in your browser and check the console output.
 | value | string || Initial content of the editor |
 | width | string || Width of the `div` element |
 | height | string || Height of the `div` element |
-| onLoad | func | noop | **Signature: function(data: string) => void** <br/> Function called when the Load button is clicked |
+| onLoad | func | noop | **Signature: function(value: string) => void** <br/> Function called when the Load button is clicked |
 | onUnload | func | noop | **Signature: function() => void** <br/> Function called when the Unload button is clicked |
 
 ## License
