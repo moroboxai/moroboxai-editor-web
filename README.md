@@ -4,7 +4,7 @@
 ![Node.js CI](https://github.com/moroboxai/moroboxai-editor-web/workflows/Node.js%20CI/badge.svg)
 [![gitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/moroboxai/moroboxai-editor-web/blob/master/LICENSE)
 
-Editor for coding AIs for MoroboxAI on the web.
+Embeddable code editor for coding AIs for MoroboxAI on the web.
 
 ## Install
 
