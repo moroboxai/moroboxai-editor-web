@@ -44,21 +44,6 @@ Create a `sample.html` file in the `moroboxai-editor-web` folder:
 </html>
 ```
 
-You can also import the lib as an ECMAScript module:
-
-```html
-<html>
- <div id="editor"></div> 
- 
- <script type="module" src="./lib/es/moroboxai-editor-web.js"></script>
- <script type="module">
-  import * as MoroboxAIEditor from "./lib/es/moroboxai-editor-web.js";
-  
-  ...
- </script>
-</html>
-```
-
 Open `sample.html` in your browser and check the console output.
 
 ## License
