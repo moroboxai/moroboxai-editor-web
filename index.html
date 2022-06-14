@@ -13,10 +13,10 @@
             value: 'function a() {\n' +
                 '  console.log("test");\n' +
                 '}\n',
-            width: '500px',
-            height: '400px',
             onLoad: (data) => console.log(data),
-            onUnload: () => console.log("unload")
+            onUnload: () => console.log("unload"),
+            width: '500px',
+            height: '400px'
         });
     </script>
 
@@ -30,8 +30,10 @@
         }
 
         #editor {
+            background: #1e1e1e;
             border-radius: 1em;
             box-shadow: 4px 4px 8px rgb(0 0 0 / 50%);
+            padding: 1em 0.5em 1em;
             overflow: hidden;
         }
     </style>
