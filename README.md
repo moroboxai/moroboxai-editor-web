@@ -2,7 +2,8 @@
 
 [![NPM version](https://img.shields.io/npm/v/moroboxai-editor-web.svg)](https://www.npmjs.com/package/moroboxai-editor-web)
 ![Node.js CI](https://github.com/moroboxai/moroboxai-editor-web/workflows/Node.js%20CI/badge.svg)
-[![gitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/moroboxai/moroboxai-editor-web/blob/master/LICENSE)
+[![gitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/moroboxai/moroboxai-editor-web/blob/master/LICENSE)[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/moroboxai/moroboxai-editor-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/moroboxai/moroboxai-editor-web/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/moroboxai/moroboxai-editor-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/moroboxai/moroboxai-editor-web/alerts)
 
 Embeddable code editor for coding AIs for [MoroboxAI](https://github.com/moroboxai) on the web.
 
