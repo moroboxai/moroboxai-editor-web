@@ -1,9 +1,9 @@
 {
   "name": "moroboxai-editor-web",
-  "version": "0.1.1-alpha.2",
+  "version": "0.1.1-alpha.3",
   "description": "MoroboxAI editor in browser",
   "author": "moroboxai",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/cjs/index.cjs",
   "module": "./lib/es/index.js",
   "unpkg": "./lib/umd/moroboxai-editor-web.min.js",
   "jsdelivr": "./lib/umd/moroboxai-editor-web.min.js",
