@@ -1,6 +1,6 @@
 {
   "name": "moroboxai-editor-web",
-  "version": "0.1.1-alpha.3",
+  "version": "0.1.1-alpha.4",
   "description": "MoroboxAI editor in browser",
   "author": "moroboxai",
   "main": "./lib/cjs/index.cjs",
@@ -31,7 +31,7 @@
     "file-loader": "^6.2.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "moroboxai-editor-sdk": "^0.1.1-alpha.2",
+    "moroboxai-editor-sdk": "^0.1.1-alpha.4",
     "path": "^0.12.7",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.8",

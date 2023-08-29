@@ -2,7 +2,7 @@ import * as ace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
-import {IEditor, IEditorOptions, IEditorFactoryOptions, IEditorInstance, init as _init} from 'moroboxai-editor-sdk';
+import {Language, DEFAULT_LANGUAGE, IEditor, IEditorOptions, IEditorFactoryOptions, IEditorInstance, init as _init} from 'moroboxai-editor-sdk';
 
 export { IEditor, IEditorOptions, defaultOptions } from 'moroboxai-editor-sdk';
 
@@ -11,22 +11,32 @@ function factory(options: IEditorFactoryOptions): IEditorInstance {
     editor.getSession().setMode('ace/mode/javascript');
     editor.setTheme('ace/theme/monokai');
 
-    return new EditorInstance(editor);
+    return new EditorInstance(editor, options.language);
 }
 
 class EditorInstance implements IEditorInstance {
     private _instance: ace.Editor;
+    private _language: Language;
 
-    constructor(instance: ace.Editor) {
+    constructor(instance: ace.Editor, language?: Language) {
         this._instance = instance;
+        this._language = language || DEFAULT_LANGUAGE;
     }
 
-    set value(text: string) {
-        this._instance.setValue(text, -1);
+    get language(): Language {
+        return this._language;
+    }
+
+    set language(value: Language) {
+        this._language = value;
     }
 
     get value(): string {
         return this._instance.getValue();
+    }
+
+    set value(text: string) {
+        this._instance.setValue(text, -1);
     }
 
     remove() {
