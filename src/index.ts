@@ -4,7 +4,18 @@ import 'brace/theme/monokai';
 
 import {Language, DEFAULT_LANGUAGE, IEditor, IEditorOptions, IEditorFactoryOptions, IEditorInstance, init as _init} from 'moroboxai-editor-sdk';
 
-export { IEditor, IEditorOptions, defaultOptions } from 'moroboxai-editor-sdk';
+export {defaultOptions} from 'moroboxai-editor-sdk';
+export type { IEditor, IEditorOptions } from 'moroboxai-editor-sdk';
+
+/**
+ * Version of the editor SDK.
+ */
+export { VERSION as EDITOR_SDK_VERSION } from "moroboxai-editor-sdk";
+
+/**
+ * Version of the editor.
+ */
+export const VERSION: string = "0.1.0-alpha.5";
 
 function factory(options: IEditorFactoryOptions): IEditorInstance {
     const editor = ace.edit(options.element);
