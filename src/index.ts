@@ -15,7 +15,7 @@ export { VERSION as EDITOR_SDK_VERSION } from "moroboxai-editor-sdk";
 /**
  * Version of the editor.
  */
-export const VERSION: string = "0.1.0-alpha.5";
+export const VERSION: string = "0.1.1-alpha.5";
 
 function factory(options: IEditorFactoryOptions): IEditorInstance {
     const editor = ace.edit(options.element);
