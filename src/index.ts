@@ -1,11 +1,28 @@
-import * as ace from 'brace';
-import 'brace/mode/javascript';
-import 'brace/theme/monokai';
+import * as ace from "brace";
+import "brace/mode/javascript";
+import "brace/theme/monokai";
 
-import {Language, DEFAULT_LANGUAGE, IEditor, IEditorOptions, IEditorFactoryOptions, IEditorInstance, init as _init} from 'moroboxai-editor-sdk';
+import {
+    Language,
+    DEFAULT_LANGUAGE,
+    IEditor,
+    IEditorOptions,
+    IEditorFactoryOptions,
+    IEditorInstance,
+    init as _init
+} from "moroboxai-editor-sdk";
 
-export {defaultOptions} from 'moroboxai-editor-sdk';
-export type { IEditor, IEditorOptions } from 'moroboxai-editor-sdk';
+export {
+    Language,
+    DEFAULT_LANGUAGE,
+    defaultOptions
+} from "moroboxai-editor-sdk";
+
+export type {
+    IEditor,
+    IEditorOptions,
+    IEditorInstance
+} from "moroboxai-editor-sdk";
 
 /**
  * Version of the editor SDK.
@@ -15,12 +32,12 @@ export { VERSION as EDITOR_SDK_VERSION } from "moroboxai-editor-sdk";
 /**
  * Version of the editor.
  */
-export const VERSION: string = "0.1.1-alpha.5";
+export const VERSION: string = "0.1.1-alpha.6";
 
 function factory(options: IEditorFactoryOptions): IEditorInstance {
     const editor = ace.edit(options.element);
-    editor.getSession().setMode('ace/mode/javascript');
-    editor.setTheme('ace/theme/monokai');
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.setTheme("ace/theme/monokai");
 
     return new EditorInstance(editor, options.language);
 }
@@ -55,19 +72,28 @@ class EditorInstance implements IEditorInstance {
     }
 }
 
-export function init() : IEditor | IEditor[];
-export function init(options: IEditorOptions) : IEditor | IEditor[];
-export function init(element: Element) : IEditor;
-export function init(element: Element[] | HTMLCollectionOf<Element>) : IEditor[];
-export function init(element: Element, options: IEditorOptions) : IEditor;
-export function init(element: Element[] | HTMLCollectionOf<Element>, options: IEditorOptions) : IEditor[];
-export function init(element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>, options?: IEditorOptions) : IEditor | IEditor[];
+export function init(): IEditor | IEditor[];
+export function init(options: IEditorOptions): IEditor | IEditor[];
+export function init(element: Element): IEditor;
+export function init(element: Element[] | HTMLCollectionOf<Element>): IEditor[];
+export function init(element: Element, options: IEditorOptions): IEditor;
+export function init(
+    element: Element[] | HTMLCollectionOf<Element>,
+    options: IEditorOptions
+): IEditor[];
+export function init(
+    element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
+    options?: IEditorOptions
+): IEditor | IEditor[];
 
 /**
  * Initialize editor on one or multiple HTML elements.
  * @param {HTMLElement} element Element to wrap
  * @param {IEditor} options Options for initializing the editor
  */
-export function init(element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>, options?: IEditorOptions) : IEditor | IEditor[] {
+export function init(
+    element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
+    options?: IEditorOptions
+): IEditor | IEditor[] {
     return _init(factory, element, options);
 }
