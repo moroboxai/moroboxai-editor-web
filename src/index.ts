@@ -12,13 +12,10 @@ import {
     init as _init
 } from "moroboxai-editor-sdk";
 
-export {
-    Language,
-    DEFAULT_LANGUAGE,
-    defaultOptions
-} from "moroboxai-editor-sdk";
+export { DEFAULT_LANGUAGE, defaultOptions } from "moroboxai-editor-sdk";
 
 export type {
+    Language,
     IEditor,
     IEditorOptions,
     IEditorInstance
