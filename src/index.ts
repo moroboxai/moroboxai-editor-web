@@ -1,24 +1,22 @@
 import * as ace from "brace";
 import "brace/mode/javascript";
+import "brace/mode/lua";
 import "brace/theme/monokai";
 
-import {
-    Language,
-    DEFAULT_LANGUAGE,
-    IEditor,
-    IEditorOptions,
-    IEditorFactoryOptions,
-    IEditorInstance,
-    init as _init
-} from "moroboxai-editor-sdk";
+import * as MoroboxAIEditorSDK from "moroboxai-editor-sdk";
 
 export { DEFAULT_LANGUAGE, defaultOptions } from "moroboxai-editor-sdk";
 
 export type {
     Language,
     IEditor,
-    IEditorOptions,
-    IEditorInstance
+    IEditorInstance,
+    IValueOptions,
+    IURLFactory,
+    IValueFactory,
+    OnLoadCallback,
+    OnUnloadCallback,
+    OnLanguageChangedCallback
 } from "moroboxai-editor-sdk";
 
 /**
@@ -31,29 +29,41 @@ export { VERSION as EDITOR_SDK_VERSION } from "moroboxai-editor-sdk";
  */
 export const VERSION: string = "__VERSION__";
 
-function factory(options: IEditorFactoryOptions): IEditorInstance {
+export interface IEditorOptions extends MoroboxAIEditorSDK.IEditorOptions {
+    // Extra options for ace
+    aceOptions: any;
+}
+
+function factory(
+    options: MoroboxAIEditorSDK.IEditorFactoryOptions
+): MoroboxAIEditorSDK.IEditorInstance {
     const editor = ace.edit(options.element);
     editor.getSession().setMode("ace/mode/javascript");
     editor.setTheme("ace/theme/monokai");
+    editor.setOptions({
+        fontFamily: "monospace",
+        fontSize: "10pt"
+    });
 
     return new EditorInstance(editor, options.language);
 }
 
-class EditorInstance implements IEditorInstance {
+class EditorInstance implements MoroboxAIEditorSDK.IEditorInstance {
     private _instance: ace.Editor;
-    private _language: Language;
+    private _language: MoroboxAIEditorSDK.Language;
 
-    constructor(instance: ace.Editor, language?: Language) {
+    constructor(instance: ace.Editor, language?: MoroboxAIEditorSDK.Language) {
         this._instance = instance;
-        this._language = language || DEFAULT_LANGUAGE;
+        this._language = language || MoroboxAIEditorSDK.DEFAULT_LANGUAGE;
     }
 
-    get language(): Language {
+    get language(): MoroboxAIEditorSDK.Language {
         return this._language;
     }
 
-    set language(value: Language) {
+    set language(value: MoroboxAIEditorSDK.Language) {
         this._language = value;
+        this._instance.getSession().setMode(`ace/mode/${value}`);
     }
 
     get value(): string {
@@ -69,19 +79,28 @@ class EditorInstance implements IEditorInstance {
     }
 }
 
-export function init(): IEditor | IEditor[];
-export function init(options: IEditorOptions): IEditor | IEditor[];
-export function init(element: Element): IEditor;
-export function init(element: Element[] | HTMLCollectionOf<Element>): IEditor[];
-export function init(element: Element, options: IEditorOptions): IEditor;
+export function init():
+    | MoroboxAIEditorSDK.IEditor
+    | MoroboxAIEditorSDK.IEditor[];
+export function init(
+    options: IEditorOptions
+): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[];
+export function init(element: Element): MoroboxAIEditorSDK.IEditor;
+export function init(
+    element: Element[] | HTMLCollectionOf<Element>
+): MoroboxAIEditorSDK.IEditor[];
+export function init(
+    element: Element,
+    options: IEditorOptions
+): MoroboxAIEditorSDK.IEditor;
 export function init(
     element: Element[] | HTMLCollectionOf<Element>,
     options: IEditorOptions
-): IEditor[];
+): MoroboxAIEditorSDK.IEditor[];
 export function init(
     element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
     options?: IEditorOptions
-): IEditor | IEditor[];
+): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[];
 
 /**
  * Initialize editor on one or multiple HTML elements.
@@ -91,6 +110,6 @@ export function init(
 export function init(
     element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
     options?: IEditorOptions
-): IEditor | IEditor[] {
-    return _init(factory, element, options);
+): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[] {
+    return MoroboxAIEditorSDK.init(factory, element, options);
 }
