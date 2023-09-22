@@ -31,7 +31,7 @@ export const VERSION: string = "__VERSION__";
 
 export interface IEditorOptions extends MoroboxAIEditorSDK.IEditorOptions {
     // Extra options for ace
-    aceOptions: any;
+    aceOptions?: any;
 }
 
 function factory(
