@@ -5,20 +5,6 @@ import "brace/theme/monokai";
 
 import * as MoroboxAIEditorSDK from "moroboxai-editor-sdk";
 
-export { DEFAULT_LANGUAGE, defaultOptions } from "moroboxai-editor-sdk";
-
-export type {
-    Language,
-    IEditor,
-    IEditorInstance,
-    IValueOptions,
-    IURLFactory,
-    IValueFactory,
-    OnLoadCallback,
-    OnUnloadCallback,
-    OnLanguageChangedCallback
-} from "moroboxai-editor-sdk";
-
 /**
  * Version of the editor SDK.
  */
@@ -29,13 +15,13 @@ export { VERSION as EDITOR_SDK_VERSION } from "moroboxai-editor-sdk";
  */
 export const VERSION: string = "__VERSION__";
 
-export interface IEditorOptions extends MoroboxAIEditorSDK.IEditorOptions {
+export interface EditorOptions extends MoroboxAIEditorSDK.EditorOptions {
     // Extra options for ace
     aceOptions?: any;
 }
 
 function factory(
-    options: MoroboxAIEditorSDK.IEditorFactoryOptions
+    options: MoroboxAIEditorSDK.EditorFactoryOptions
 ): MoroboxAIEditorSDK.IEditorInstance {
     const editor = ace.edit(options.element);
     editor.getSession().setMode("ace/mode/javascript");
@@ -83,7 +69,7 @@ export function init():
     | MoroboxAIEditorSDK.IEditor
     | MoroboxAIEditorSDK.IEditor[];
 export function init(
-    options: IEditorOptions
+    options: EditorOptions
 ): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[];
 export function init(element: Element): MoroboxAIEditorSDK.IEditor;
 export function init(
@@ -91,15 +77,15 @@ export function init(
 ): MoroboxAIEditorSDK.IEditor[];
 export function init(
     element: Element,
-    options: IEditorOptions
+    options: EditorOptions
 ): MoroboxAIEditorSDK.IEditor;
 export function init(
     element: Element[] | HTMLCollectionOf<Element>,
-    options: IEditorOptions
+    options: EditorOptions
 ): MoroboxAIEditorSDK.IEditor[];
 export function init(
-    element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
-    options?: IEditorOptions
+    element?: EditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
+    options?: EditorOptions
 ): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[];
 
 /**
@@ -108,8 +94,8 @@ export function init(
  * @param {IEditor} options Options for initializing the editor
  */
 export function init(
-    element?: IEditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
-    options?: IEditorOptions
+    element?: EditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
+    options?: EditorOptions
 ): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[] {
     return MoroboxAIEditorSDK.init(factory, element, options);
 }
