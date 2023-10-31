@@ -60,6 +60,10 @@ class EditorInstance implements MoroboxAIEditorSDK.IEditorInstance {
         this._instance.setValue(text, -1);
     }
 
+    resize() {
+        this._instance.resize();
+    }
+
     remove() {
         this._instance.destroy();
     }
