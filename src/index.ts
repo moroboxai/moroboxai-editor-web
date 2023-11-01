@@ -20,20 +20,6 @@ export interface EditorOptions extends MoroboxAIEditorSDK.EditorOptions {
     aceOptions?: any;
 }
 
-function factory(
-    options: MoroboxAIEditorSDK.EditorFactoryOptions
-): MoroboxAIEditorSDK.IEditorInstance {
-    const editor = ace.edit(options.element);
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.setTheme("ace/theme/monokai");
-    editor.setOptions({
-        fontFamily: "monospace",
-        fontSize: "10pt"
-    });
-
-    return new EditorInstance(editor, options.language);
-}
-
 class EditorInstance implements MoroboxAIEditorSDK.IEditorInstance {
     private _instance: ace.Editor;
     private _language: MoroboxAIEditorSDK.Language;
@@ -101,5 +87,22 @@ export function init(
     element?: EditorOptions | Element | Element[] | HTMLCollectionOf<Element>,
     options?: EditorOptions
 ): MoroboxAIEditorSDK.IEditor | MoroboxAIEditorSDK.IEditor[] {
-    return MoroboxAIEditorSDK.init(factory, element, options);
+    return MoroboxAIEditorSDK.init(
+        (
+            factoryOptions: MoroboxAIEditorSDK.EditorFactoryOptions
+        ): MoroboxAIEditorSDK.IEditorInstance => {
+            const editor = ace.edit(factoryOptions.element);
+            editor.getSession().setMode("ace/mode/javascript");
+            editor.setTheme("ace/theme/monokai");
+            editor.setOptions({
+                fontFamily: "monospace",
+                fontSize: "10pt",
+                ...(options?.aceOptions ?? {})
+            });
+
+            return new EditorInstance(editor, factoryOptions.language);
+        },
+        element,
+        options
+    );
 }
