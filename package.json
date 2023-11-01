@@ -1,6 +1,6 @@
 {
     "name": "moroboxai-editor-web",
-    "version": "0.1.1-alpha.11",
+    "version": "0.1.1-alpha.12",
     "description": "MoroboxAI editor in browser",
     "author": "moroboxai",
     "main": "./lib/cjs/index.cjs",
